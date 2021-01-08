@@ -64,3 +64,31 @@ window.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+// add signup on web redirect logic (passes params through (from referral page))
+function getQueryParams() {
+    var search = window.location.search.substring(1);
+    var stringifiedJSON = '{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}';
+    if (stringifiedJSON === '{""}') {
+      stringifiedJSON = '{}'
+    }
+    // Parse query string into JS object
+    var queryParams = JSON.parse(stringifiedJSON, function(key, value) { return key===""?value:decodeURIComponent(value) })
+    return queryParams;
+}
+
+function redirectToSignup(event) {
+    event.preventDefault();
+    var queryParams = getQueryParams();
+    queryParams.anonymousId = window.anonymousId;
+    var queryString = Object.keys(queryParams).map(key => key + '=' + queryParams[key]).join('&');
+    window.open("https://digit.co/signup?" + queryString, "_blank");
+}
+  
+  window.addEventListener('DOMContentLoaded', function () {
+        // Add click tracking to all links that go to digit.co/signup
+        Array.prototype.map.call(document.querySelectorAll('[href*="digit.co/signup"]'), function (a) {
+            return a.closest("div").addEventListener("click", redirectToSignup);
+        });
+  });
+  // ------ END BUTTON REDIRECT ATTRIBUTION LOGIC ------
