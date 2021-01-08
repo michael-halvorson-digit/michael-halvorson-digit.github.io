@@ -29,13 +29,13 @@ jobs:
         uses: nizarmah/auto-minify@master
         with:
           directory: '/docs/js'
-          output: '/docs/mini_js'
+          output: '/docs/mjs'
 
       # Auto commits minified files to the repository
       # Ignore it if you don't want to commit the files to the repository 
       - name: Auto committing minified files
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          repository: '/docs/mini_js'
+          repository: '/docs/mjs'
           commit_message: "Github Action: Auto Minified JS and CSS files"
           branch: ${{ github.ref }}
