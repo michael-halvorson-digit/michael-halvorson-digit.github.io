@@ -56,19 +56,6 @@ window.trackingProperties = {
     referredByTrackingId: queryParams.referredByTrackingId,
     variantName: window.__variant_custom_name,
 };
-/*
-function dynamicallyLoadScript(url) {
-    var script = document.createElement("script");  // create a script DOM node
-    script.src = url;  // set its src to the provided URL
-
-    document.head.appendChild(script);  // add it to the end of the head section of the page (could change 'head' to 'body' to add it to the end of the body section instead)
-}
-
-dynamicallyLoadScript('https://web-sdk-cdn.singular.net/singular-sdk/latest/singular-sdk.js');
-
-var _singularConfig = new SingularConfig("digit_267232f4", "8988da2ac118a4b29ced5386e045080c", "digit.co");
-singularSdk.init(_singularConfig);
-*/
 var script = document.createElement('script');
 script.onload = function () {
     var _singularConfig = new SingularConfig("digit_267232f4", "8988da2ac118a4b29ced5386e045080c", "digit.co");
