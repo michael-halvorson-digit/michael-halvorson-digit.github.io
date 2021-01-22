@@ -1,16 +1,16 @@
 var _rollbarConfig = {
-    accessToken: "d6810322ff3e4e9d8ad4cced826e95c9",
-    captureUncaught: true,
-    captureUnhandledRejections: true,
-    scrubTelemetryInputs: true,
-    payload: {
-        environment: "production",
-        client: {
-            javascript: {
-                source_map_enabled: true,
-            }
-        }
+  accessToken: "d6810322ff3e4e9d8ad4cced826e95c9",
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+  scrubTelemetryInputs: true,
+  payload: {
+    environment: "production",
+    client: {
+      javascript: {
+        source_map_enabled: true,
+      }
     }
+  }
 };
 
 // Rollbar Snippet
@@ -18,77 +18,77 @@ var _rollbarConfig = {
 // End Rollbar Snippet
 
 function getMobileOperatingSystem() {
-    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    if (/android/i.test(userAgent)) {
-        return "Android";
-    }
-    // iOS detection from: http://stackoverflow.com/a/9039885/177710
-    if (/iPad|iPhone|iPod/.test(userAgent)) {
-        return "iOS";
-    }
-    return "unknown";
+  var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  if (/android/i.test(userAgent)) {
+    return "Android";
+  }
+  // iOS detection from: http://stackoverflow.com/a/9039885/177710
+  if (/iPad|iPhone|iPod/.test(userAgent)) {
+    return "iOS";
+  }
+  return "unknown";
 }
 function getPassthroughParams() {
-    // Grab query string
-    var search = window.location.search.substring(1);
-    var stringifiedJSON = '{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}';
-    if (stringifiedJSON === '{""}') {
-        stringifiedJSON = '{}'
-    }
-    // Parse query string into JS object
-    var queryParams = JSON.parse(stringifiedJSON, function (key, value) { return key === "" ? value : decodeURIComponent(value) })
-    // Append anonId for tracking
-    queryParams.anonId = window.anonymousId || window.analytics.user().anonymousId();
-    return queryParams;
+  // Grab query string
+  var search = window.location.search.substring(1);
+  var stringifiedJSON = '{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}';
+  if (stringifiedJSON === '{""}') {
+    stringifiedJSON = '{}'
+  }
+  // Parse query string into JS object
+  var queryParams = JSON.parse(stringifiedJSON, function (key, value) { return key === "" ? value : decodeURIComponent(value) })
+  // Append anonId for tracking
+  queryParams.anonId = window.anonymousId || window.analytics.user().anonymousId();
+  return queryParams;
 }
 
 window.addEventListener('load', function () {
-    var webToAppElems = Array.from(document.querySelectorAll("#appStoreCta, #playStoreCta"));
-    var passthroughParams = getPassthroughParams();
-    var singularDeeplink = "https://digit.sng.link/A59e5/jq9o?_dl=home&_p=" + encodeURIComponent(JSON.stringify(passthroughParams));
-    webToAppElems.forEach((elem) => {
-        elem.href = singularDeeplink;
-    });
+  var webToAppElems = Array.from(document.querySelectorAll("#appStoreCta, #playStoreCta"));
+  var passthroughParams = getPassthroughParams();
+  var singularDeeplink = "https://digit.sng.link/A59e5/jq9o?_dl=home&_p=" + encodeURIComponent(JSON.stringify(passthroughParams));
+  webToAppElems.forEach((elem) => {
+    elem.href = singularDeeplink;
+  });
 });
 window.addEventListener('DOMContentLoaded', function () {
-    var os = getMobileOperatingSystem();
-    var appStoreElems = Array.from(document.querySelectorAll("#appStoreCta"));
-    var playStoreElems = Array.from(document.querySelectorAll("#playStoreCta"));
-    if (os === "iOS") {
-        playStoreElems.forEach((elem) => {
-            elem.classList.add("h-hide");
-        });
-    } else if (os === "Android") {
-        appStoreElems.forEach((elem) => {
-            elem.classList.add("h-hide");
-        });
-    }
+  var os = getMobileOperatingSystem();
+  var appStoreElems = Array.from(document.querySelectorAll("#appStoreCta"));
+  var playStoreElems = Array.from(document.querySelectorAll("#playStoreCta"));
+  if (os === "iOS") {
+    playStoreElems.forEach((elem) => {
+      elem.classList.add("h-hide");
+    });
+  } else if (os === "Android") {
+    appStoreElems.forEach((elem) => {
+      elem.classList.add("h-hide");
+    });
+  }
 });
 
 // add signup on web redirect logic (passes params through (from referral page))
 function getQueryParams() {
-    var search = window.location.search.substring(1);
-    var stringifiedJSON = '{"' + search.replace(/&/g, '","').replace(/=/g,'":"') + '"}';
-    if (stringifiedJSON === '{""}') {
-      stringifiedJSON = '{}'
-    }
-    // Parse query string into JS object
-    var queryParams = JSON.parse(stringifiedJSON, function(key, value) { return key===""?value:decodeURIComponent(value) })
-    return queryParams;
+  var search = window.location.search.substring(1);
+  var stringifiedJSON = '{"' + search.replace(/&/g, '","').replace(/=/g, '":"') + '"}';
+  if (stringifiedJSON === '{""}') {
+    stringifiedJSON = '{}'
+  }
+  // Parse query string into JS object
+  var queryParams = JSON.parse(stringifiedJSON, function (key, value) { return key === "" ? value : decodeURIComponent(value) })
+  return queryParams;
 }
 
 function redirectToSignup(event) {
-    event.preventDefault();
-    var queryParams = getQueryParams();
-    queryParams.anonymousId = window.anonymousId;
-    var queryString = Object.keys(queryParams).map(key => key + '=' + queryParams[key]).join('&');
-    window.open("https://digit.co/signup?" + queryString, "_blank");
+  event.preventDefault();
+  var queryParams = getQueryParams();
+  queryParams.anonymousId = window.anonymousId;
+  var queryString = Object.keys(queryParams).map(key => key + '=' + queryParams[key]).join('&');
+  window.open("https://digit.co/signup?" + queryString, "_blank");
 }
-  
-  window.addEventListener('DOMContentLoaded', function () {
-        // Add click tracking to all links that go to digit.co/signup
-        Array.prototype.map.call(document.querySelectorAll('[href*="digit.co/signup"]'), function (a) {
-            return a.closest("div").addEventListener("click", redirectToSignup);
-        });
+
+window.addEventListener('DOMContentLoaded', function () {
+  // Add click tracking to all links that go to digit.co/signup
+  Array.prototype.map.call(document.querySelectorAll('[href*="digit.co/signup"]'), function (a) {
+    return a.closest("div").addEventListener("click", redirectToSignup);
   });
+});
   // ------ END BUTTON REDIRECT ATTRIBUTION LOGIC ------
